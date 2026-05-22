@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+_last_result.txt
+config.json
+
+build/
+dist/
+*.spec
+graphify-out/
+
+*.log
