@@ -1,0 +1,20 @@
+SaveImageToLink 快速开始
+
+1. 双击 SaveImageToLink-windows-x64.exe。
+2. 在“保存目录 / Save folder”中选择图片保存位置。
+3. 选择复制格式：
+   - Markdown 图片：推荐，适合 Obsidian 和 Markdown 文档。
+   - 纯路径：适合本机文件和脚本。
+   - 文件链接 file://：适合浏览器和 HTML。
+4. 点击“安装并启用 / Install and Enable”。
+5. 复制一张截图或图片。
+6. 在资源管理器文件夹空白处右键：
+   - “保存图片到此处 / Save image here”
+   - “保存图片并复制链接 / Save image and copy link”
+
+卸载右键菜单：
+打开程序，点击“卸载右键菜单 / Uninstall menu”。
+
+默认保存目录：
+%USERPROFILE%\Pictures\SaveImageToLink
+

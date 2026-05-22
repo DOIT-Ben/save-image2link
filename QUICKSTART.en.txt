@@ -1,0 +1,20 @@
+SaveImageToLink Quick Start
+
+1. Double-click SaveImageToLink-windows-x64.exe.
+2. Choose a folder in "保存目录 / Save folder".
+3. Choose a copy format:
+   - Markdown image: recommended for Obsidian and Markdown documents.
+   - Plain path: useful for local files and scripts.
+   - File URI: useful for browsers and HTML.
+4. Click "安装并启用 / Install and Enable".
+5. Copy a screenshot or image.
+6. Right-click the background area of an Explorer folder:
+   - "保存图片到此处 / Save image here"
+   - "保存图片并复制链接 / Save image and copy link"
+
+To remove the context menu:
+Open the app and click "卸载右键菜单 / Uninstall menu".
+
+Default save folder:
+%USERPROFILE%\Pictures\SaveImageToLink
+

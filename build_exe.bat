@@ -14,7 +14,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-python -m PyInstaller --onefile --noconsole --name SaveImageToLink save_image.py
+python -m PyInstaller --onefile --noconsole --icon assets\icon.ico --name SaveImageToLink save_image.py
 
 if errorlevel 1 (
     echo.
@@ -25,4 +25,3 @@ if errorlevel 1 (
 echo.
 echo Built: dist\SaveImageToLink.exe
 echo.
-

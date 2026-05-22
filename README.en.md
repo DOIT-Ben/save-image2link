@@ -18,6 +18,7 @@ A small clipboard image saver. Copy a screenshot or image, save it to a folder, 
 - macOS: Finder Quick Actions installer.
 - Default save folder: current user's Pictures folder under `SaveImageToLink`.
 - Copy formats: plain path, Markdown image syntax, and file URI.
+- Windows exe includes an app icon and bilingual quick-start files.
 
 ## Windows Usage
 
@@ -25,7 +26,7 @@ Download `SaveImageToLink.exe` and double-click it to open the settings window.
 
 1. Choose a save folder.
 2. Choose a copy format.
-3. Click `安装右键菜单 / Install menu`.
+3. Click `安装并启用 / Install and Enable`.
 4. Copy a screenshot or image.
 5. Right-click the background area of an Explorer folder:
    - `保存图片到此处 / Save image here`: save the image to the current folder.

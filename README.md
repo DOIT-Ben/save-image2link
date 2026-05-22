@@ -18,6 +18,7 @@
 - macOS 支持安装 Finder Quick Actions。
 - 默认保存目录为当前用户的图片目录下 `SaveImageToLink`。
 - 支持复制格式：纯路径、Markdown 图片语法、file URI。
+- Windows exe 内置应用图标，并提供中英文快速开始说明。
 
 ## Windows 使用方式
 
@@ -25,7 +26,7 @@
 
 1. 选择图片保存目录。
 2. 选择复制格式。
-3. 点击 `安装右键菜单 / Install menu`。
+3. 点击 `安装并启用 / Install and Enable`。
 4. 复制一张截图或图片。
 5. 在资源管理器文件夹空白处右键：
    - `保存图片到此处 / Save image here`：保存到当前文件夹。

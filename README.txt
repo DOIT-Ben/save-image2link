@@ -9,7 +9,7 @@ macOS source version with Finder Quick Actions is in macos/.
 Usage:
 1. Run SaveImageToLink.exe.
 2. Choose a save folder and copy format.
-3. Click Install context menu.
+3. Click 安装并启用 / Install and Enable.
 4. Copy a screenshot or image.
 5. Right-click an Explorer folder background.
 

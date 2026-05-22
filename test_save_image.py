@@ -53,6 +53,24 @@ class SaveImageTests(unittest.TestCase):
         self.assertIn("--save-default", commands["default"])
         self.assertIn("--copy", commands["default"])
 
+    def test_copy_format_options_are_user_friendly(self):
+        options = save_image.copy_format_options()
+
+        self.assertEqual(options[0]["value"], "markdown")
+        self.assertIn("Markdown 图片", options[0]["label"])
+        self.assertIn("推荐", options[0]["description"])
+
+    def test_friendly_error_messages_hide_python_details(self):
+        self.assertIn("剪贴板里没有图片", save_image.friendly_error_message(RuntimeError("No image in clipboard")))
+        self.assertIn(
+            "无法写入",
+            save_image.friendly_error_message(RuntimeError("Target folder is not writable: C:\\Temp")),
+        )
+
+    def test_context_menu_installed_is_false_outside_windows(self):
+        with patch.object(save_image.os, "name", "posix"):
+            self.assertFalse(save_image.is_context_menu_installed())
+
     def test_default_mode_saves_to_configured_folder_and_copies_markdown(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             copied = []
