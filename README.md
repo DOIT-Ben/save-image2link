@@ -1,8 +1,8 @@
 # SaveImageToLink
 
-一个 Windows 剪贴板图片保存小工具：复制截图后，可以通过资源管理器右键菜单把图片保存到指定目录，并自动复制本地图片引用。
+[English README](README.en.md)
 
-> English: Save clipboard images from Explorer context menu and copy a local path, Markdown image, or file URI.
+一个 Windows 剪贴板图片保存小工具：复制截图后，可以通过资源管理器右键菜单把图片保存到指定目录，并自动复制本地图片引用。
 
 ## 功能
 
@@ -70,4 +70,3 @@ dist\SaveImageToLink.exe
 ```powershell
 python -m unittest test_save_image.py
 ```
-

@@ -1,4 +1,7 @@
-SaveImageToLink
+SaveImageToLink / 剪贴板图片保存工具
+
+中文说明: README.md
+English README: README.en.md
 
 Windows clipboard image saver with an Explorer context menu.
 
@@ -22,4 +25,3 @@ Config:
 Build from source:
 python -m pip install -r requirements-dev.txt
 build_exe.bat
-
