@@ -13,7 +13,7 @@ A small clipboard image saver. Copy a screenshot or image, save it to a folder, 
 
 ## Features
 
-- Visual settings window for save folder, filename prefix, and copy format.
+- Compact modern settings window for save folder, filename prefix, and copy format.
 - Windows: one-click install/uninstall for Explorer context-menu entries.
 - macOS: Finder Quick Actions installer.
 - Default save folder: current user's Pictures folder under `SaveImageToLink`.
@@ -22,7 +22,7 @@ A small clipboard image saver. Copy a screenshot or image, save it to a folder, 
 
 ## Windows Usage
 
-Download `SaveImageToLink.exe` and double-click it to open the settings window.
+Download `SaveImageToLink-Setup-Windows-x64.exe` and double-click it to open the settings window.
 
 1. Choose a save folder.
 2. Choose a copy format.
@@ -45,6 +45,8 @@ uninstall.bat
 python -m pip install -r requirements.txt
 python .\save_image.py
 ```
+
+The Windows settings window uses `CustomTkinter`. Source users install it through `requirements.txt`; the released exe bundles all required dependencies.
 
 Common commands:
 

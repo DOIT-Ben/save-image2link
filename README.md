@@ -13,7 +13,7 @@
 
 ## 功能
 
-- 可视化设置保存目录、文件名前缀和复制格式。
+- 小巧的现代设置窗口，可视化设置保存目录、文件名前缀和复制格式。
 - Windows 支持一键安装/卸载资源管理器右键菜单。
 - macOS 支持安装 Finder Quick Actions。
 - 默认保存目录为当前用户的图片目录下 `SaveImageToLink`。
@@ -22,7 +22,7 @@
 
 ## Windows 使用方式
 
-下载 `SaveImageToLink.exe` 后双击打开设置窗口。
+下载 `SaveImageToLink-Setup-Windows-x64.exe` 后双击打开设置窗口。
 
 1. 选择图片保存目录。
 2. 选择复制格式。
@@ -45,6 +45,8 @@ uninstall.bat
 python -m pip install -r requirements.txt
 python .\save_image.py
 ```
+
+Windows 设置窗口使用 `CustomTkinter`，源码运行时会随 `requirements.txt` 安装；发布版 exe 已内置依赖，普通用户不需要安装 Python。
 
 常用命令：
 

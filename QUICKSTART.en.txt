@@ -1,7 +1,7 @@
 SaveImageToLink Quick Start
 
-1. Double-click SaveImageToLink-windows-x64.exe.
-2. Choose a folder in "保存目录 / Save folder".
+1. Double-click SaveImageToLink-Setup-Windows-x64.exe.
+2. Choose a folder in "保存目录".
 3. Choose a copy format:
    - Markdown image: recommended for Obsidian and Markdown documents.
    - Plain path: useful for local files and scripts.
@@ -13,7 +13,7 @@ SaveImageToLink Quick Start
    - "保存图片并复制链接 / Save image and copy link"
 
 To remove the context menu:
-Open the app and click "卸载右键菜单 / Uninstall menu".
+Open the app and click "卸载".
 
 Default save folder:
 %USERPROFILE%\Pictures\SaveImageToLink

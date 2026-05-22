@@ -14,7 +14,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
-python -m PyInstaller --onefile --noconsole --icon assets\icon.ico --name SaveImageToLink save_image.py
+python -m PyInstaller ^
+  --onefile ^
+  --noconsole ^
+  --icon assets\icon.ico ^
+  --add-data "assets;assets" ^
+  --collect-all customtkinter ^
+  --name SaveImageToLink ^
+  save_image.py
 
 if errorlevel 1 (
     echo.

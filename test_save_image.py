@@ -58,7 +58,23 @@ class SaveImageTests(unittest.TestCase):
 
         self.assertEqual(options[0]["value"], "markdown")
         self.assertIn("Markdown 图片", options[0]["label"])
-        self.assertIn("推荐", options[0]["description"])
+        self.assertIn("推荐", options[0]["label"])
+
+    def test_copy_format_options_use_compact_chinese_labels(self):
+        options = save_image.copy_format_options()
+
+        self.assertEqual(
+            [item["label"] for item in options],
+            ["Markdown 图片（推荐）", "纯路径", "文件链接 file://"],
+        )
+        for item in options:
+            self.assertNotIn(" / ", item["label"])
+            self.assertNotIn(" / ", item["description"])
+
+    def test_copy_format_label_returns_compact_chinese_label(self):
+        self.assertEqual(save_image.copy_format_label("markdown"), "Markdown 图片（推荐）")
+        self.assertEqual(save_image.copy_format_label("path"), "纯路径")
+        self.assertEqual(save_image.copy_format_label("file_uri"), "文件链接 file://")
 
     def test_friendly_error_messages_hide_python_details(self):
         self.assertIn("剪贴板里没有图片", save_image.friendly_error_message(RuntimeError("No image in clipboard")))
