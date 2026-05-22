@@ -25,11 +25,11 @@ Download `SaveImageToLink.exe` and double-click it to open the settings window.
 
 1. Choose a save folder.
 2. Choose a copy format.
-3. Click `Install context menu`.
+3. Click `安装右键菜单 / Install menu`.
 4. Copy a screenshot or image.
 5. Right-click the background area of an Explorer folder:
-   - `Save image here`: save the image to the current folder.
-   - `Save image and copy link`: save the image to the configured folder and copy the image reference.
+   - `保存图片到此处 / Save image here`: save the image to the current folder.
+   - `保存图片并复制链接 / Save image and copy link`: save the image to the configured folder and copy the image reference.
 
 You can also use the batch files:
 
@@ -110,6 +110,10 @@ macos/README.md
 ## Privacy And Local Data
 
 This tool only reads clipboard images locally and saves them to the folder selected by the user. v1 does not upload images, connect to a remote image host, or include personal paths.
+
+## Language
+
+The Windows exe uses bilingual Chinese/English text in the settings window, notifications, and context-menu entries. Documentation is available as Chinese `README.md` and English `README.en.md`.
 
 ## Development Check
 

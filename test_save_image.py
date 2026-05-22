@@ -74,7 +74,7 @@ class SaveImageTests(unittest.TestCase):
             self.assertEqual(saved.suffix, ".png")
             self.assertTrue(saved.exists())
             self.assertEqual(copied, [f"![]({saved})"])
-            notify.assert_called_once_with("Image saved and link copied", f"![]({saved})", is_error=False)
+            notify.assert_called_once_with("图片已保存并复制链接 / Image saved and link copied", f"![]({saved})", is_error=False)
 
     def test_current_folder_mode_shows_saved_notification(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -87,7 +87,7 @@ class SaveImageTests(unittest.TestCase):
             saved = Path(result)
             self.assertEqual(saved.parent, Path(tmpdir))
             self.assertTrue(saved.exists())
-            notify.assert_called_once_with("Image saved", str(saved), is_error=False)
+            notify.assert_called_once_with("图片已保存 / Image saved", str(saved), is_error=False)
 
 
 if __name__ == "__main__":

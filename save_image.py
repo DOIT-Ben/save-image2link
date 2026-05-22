@@ -22,6 +22,27 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 RESULT_FILE = SCRIPT_DIR / "_last_result.txt"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff"}
 COPY_FORMATS = {"path", "markdown", "file_uri"}
+TEXT = {
+    "window_title": "保存图片链接 / SaveImageToLink",
+    "save_folder": "保存目录 / Save folder",
+    "browse": "选择 / Browse",
+    "copy_format": "复制格式 / Copy format",
+    "filename_prefix": "文件名前缀 / Filename prefix",
+    "save_settings": "保存设置 / Save",
+    "open_folder": "打开目录 / Open",
+    "restore_default": "恢复默认 / Default",
+    "install_menu": "安装右键菜单 / Install menu",
+    "uninstall_menu": "卸载右键菜单 / Uninstall menu",
+    "test_save": "测试保存 / Test",
+    "menu_here": "保存图片到此处 / Save image here",
+    "menu_default": "保存图片并复制链接 / Save image and copy link",
+    "saved": "图片已保存 / Image saved",
+    "saved_link": "图片已保存并复制链接 / Image saved and link copied",
+    "failed": "保存图片失败 / Save image failed",
+    "settings_saved": "设置已保存 / Settings saved",
+    "menu_installed": "右键菜单已安装 / Context menu installed.",
+    "menu_removed": "右键菜单已卸载 / Context menu removed.",
+}
 MENU_KEYS = {
     "here": r"Software\Classes\Directory\Background\shell\SaveImageToLinkHere",
     "default": r"Software\Classes\Directory\Background\shell\SaveImageToLinkDefault",
@@ -254,9 +275,9 @@ def save_clipboard_image(
         text = format_clipboard_text(filepath, active_config)
         set_clipboard_text(text)
         if notify:
-            show_notification("Image saved and link copied", text, is_error=False)
+            show_notification(TEXT["saved_link"], text, is_error=False)
     elif notify:
-        show_notification("Image saved", saved_path, is_error=False)
+        show_notification(TEXT["saved"], saved_path, is_error=False)
     return saved_path
 
 
@@ -289,8 +310,8 @@ def install_context_menu(program: Path | None = None) -> None:
 
     commands = build_context_menu_commands(program)
     entries = {
-        "here": ("Save image here", commands["here"]),
-        "default": ("Save image and copy link", commands["default"]),
+        "here": (TEXT["menu_here"], commands["here"]),
+        "default": (TEXT["menu_default"], commands["default"]),
     }
     for name, (label, command) in entries.items():
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER, MENU_KEYS[name]) as key:
@@ -331,7 +352,7 @@ def open_settings_window() -> None:
 
     config = load_config()
     root = tk.Tk()
-    root.title(APP_NAME)
+    root.title(TEXT["window_title"])
     root.resizable(False, False)
 
     save_dir_var = tk.StringVar(value=config["save_dir"])
@@ -355,7 +376,7 @@ def open_settings_window() -> None:
 
     def save_settings() -> None:
         path = save_config(current_config())
-        status_var.set(f"Settings saved: {path}")
+        status_var.set(f"{TEXT['settings_saved']}: {path}")
 
     def open_folder() -> None:
         cfg = current_config()
@@ -369,14 +390,14 @@ def open_settings_window() -> None:
         try:
             save_settings()
             install_context_menu()
-            messagebox.showinfo(APP_NAME, "Context menu installed.")
+            messagebox.showinfo(APP_NAME, TEXT["menu_installed"])
         except Exception as exc:
             messagebox.showerror(APP_NAME, str(exc))
 
     def uninstall_menu() -> None:
         try:
             uninstall_context_menu()
-            messagebox.showinfo(APP_NAME, "Context menu removed.")
+            messagebox.showinfo(APP_NAME, TEXT["menu_removed"])
         except Exception as exc:
             messagebox.showerror(APP_NAME, str(exc))
 
@@ -392,26 +413,26 @@ def open_settings_window() -> None:
     frame = ttk.Frame(root, padding=12)
     frame.grid(row=0, column=0, sticky="nsew")
 
-    ttk.Label(frame, text="Save folder").grid(row=0, column=0, sticky="w", **padding)
+    ttk.Label(frame, text=TEXT["save_folder"]).grid(row=0, column=0, sticky="w", **padding)
     ttk.Entry(frame, width=54, textvariable=save_dir_var).grid(row=0, column=1, sticky="ew", **padding)
-    ttk.Button(frame, text="Browse", command=choose_folder).grid(row=0, column=2, **padding)
+    ttk.Button(frame, text=TEXT["browse"], command=choose_folder).grid(row=0, column=2, **padding)
 
-    ttk.Label(frame, text="Copy format").grid(row=1, column=0, sticky="w", **padding)
+    ttk.Label(frame, text=TEXT["copy_format"]).grid(row=1, column=0, sticky="w", **padding)
     ttk.Combobox(frame, values=sorted(COPY_FORMATS), textvariable=format_var, state="readonly", width=18).grid(
         row=1, column=1, sticky="w", **padding
     )
 
-    ttk.Label(frame, text="Filename prefix").grid(row=2, column=0, sticky="w", **padding)
+    ttk.Label(frame, text=TEXT["filename_prefix"]).grid(row=2, column=0, sticky="w", **padding)
     ttk.Entry(frame, width=24, textvariable=prefix_var).grid(row=2, column=1, sticky="w", **padding)
 
     buttons = ttk.Frame(frame)
     buttons.grid(row=3, column=0, columnspan=3, sticky="ew", pady=(10, 2))
-    ttk.Button(buttons, text="Save settings", command=save_settings).grid(row=0, column=0, padx=4)
-    ttk.Button(buttons, text="Open folder", command=open_folder).grid(row=0, column=1, padx=4)
-    ttk.Button(buttons, text="Restore default", command=reset_default).grid(row=0, column=2, padx=4)
-    ttk.Button(buttons, text="Install context menu", command=install_menu).grid(row=0, column=3, padx=4)
-    ttk.Button(buttons, text="Uninstall context menu", command=uninstall_menu).grid(row=0, column=4, padx=4)
-    ttk.Button(buttons, text="Test save", command=test_save).grid(row=0, column=5, padx=4)
+    ttk.Button(buttons, text=TEXT["save_settings"], command=save_settings).grid(row=0, column=0, padx=4)
+    ttk.Button(buttons, text=TEXT["open_folder"], command=open_folder).grid(row=0, column=1, padx=4)
+    ttk.Button(buttons, text=TEXT["restore_default"], command=reset_default).grid(row=0, column=2, padx=4)
+    ttk.Button(buttons, text=TEXT["install_menu"], command=install_menu).grid(row=0, column=3, padx=4)
+    ttk.Button(buttons, text=TEXT["uninstall_menu"], command=uninstall_menu).grid(row=0, column=4, padx=4)
+    ttk.Button(buttons, text=TEXT["test_save"], command=test_save).grid(row=0, column=5, padx=4)
 
     ttk.Label(frame, textvariable=status_var, foreground="#555").grid(row=4, column=0, columnspan=3, sticky="w", **padding)
     root.mainloop()
@@ -462,5 +483,5 @@ if __name__ == "__main__":
     except Exception as exc:
         message = str(exc)
         RESULT_FILE.write_text("ERROR:" + message, encoding="utf-8")
-        show_notification("Save image failed", message, is_error=True)
+        show_notification(TEXT["failed"], message, is_error=True)
         raise
