@@ -2,18 +2,24 @@
 
 [English README](README.en.md)
 
-一个 Windows 剪贴板图片保存小工具：复制截图后，可以通过资源管理器右键菜单把图片保存到指定目录，并自动复制本地图片引用。
+一个剪贴板图片保存小工具：复制截图后，把图片保存到指定目录，并自动复制本地图片引用。
+
+## 平台状态
+
+| 平台 | 状态 | 集成方式 |
+|------|------|----------|
+| Windows 10 / 11 | 已实现，可打包 exe | 资源管理器右键菜单 |
+| macOS 12+ | 源码已实现，需在 macOS 上打包和验证 | Finder Quick Actions |
 
 ## 功能
 
 - 可视化设置保存目录、文件名前缀和复制格式。
-- 一键安装/卸载资源管理器右键菜单。
-- 默认保存目录为当前用户的 `Pictures\SaveImageToLink`。
-- 配置保存到当前用户的 `%APPDATA%\SaveImageToLink\config.json`。
-- 右键菜单写入当前用户注册表，不需要管理员权限。
+- Windows 支持一键安装/卸载资源管理器右键菜单。
+- macOS 支持安装 Finder Quick Actions。
+- 默认保存目录为当前用户的图片目录下 `SaveImageToLink`。
 - 支持复制格式：纯路径、Markdown 图片语法、file URI。
 
-## 使用方式
+## Windows 使用方式
 
 下载 `SaveImageToLink.exe` 后双击打开设置窗口。
 
@@ -61,6 +67,46 @@ python -m pip install -r requirements-dev.txt
 dist\SaveImageToLink.exe
 ```
 
+## macOS 使用方式
+
+macOS 版本源码在：
+
+```text
+macos/
+```
+
+运行设置窗口：
+
+```zsh
+cd macos
+python3 -m pip install -r requirements.txt
+python3 save_image_to_link_macos.py --settings
+```
+
+安装 Finder Quick Actions：
+
+```zsh
+python3 install_finder_actions.py
+```
+
+卸载 Finder Quick Actions：
+
+```zsh
+python3 install_finder_actions.py --uninstall
+```
+
+打包 `.app` 需要在 macOS 上执行：
+
+```zsh
+./build_app.sh
+```
+
+详见：
+
+```text
+macos/README.md
+```
+
 ## 隐私与本地数据
 
 本工具只在本机读取剪贴板图片并保存到用户选择的目录。v1 不上传图片，不连接远程图床，不内置任何个人路径。
@@ -68,5 +114,5 @@ dist\SaveImageToLink.exe
 ## 开发验证
 
 ```powershell
-python -m unittest test_save_image.py
+python -m unittest test_save_image.py test_macos_save_image.py
 ```

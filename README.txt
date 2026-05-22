@@ -4,6 +4,7 @@ SaveImageToLink / 剪贴板图片保存工具
 English README: README.en.md
 
 Windows clipboard image saver with an Explorer context menu.
+macOS source version with Finder Quick Actions is in macos/.
 
 Usage:
 1. Run SaveImageToLink.exe.

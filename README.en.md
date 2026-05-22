@@ -2,18 +2,24 @@
 
 [中文说明](README.md)
 
-A small Windows clipboard image saver. Copy a screenshot or image, then use the Explorer context menu to save it to a folder and copy a local image reference.
+A small clipboard image saver. Copy a screenshot or image, save it to a folder, and copy a local image reference.
+
+## Platform Status
+
+| Platform | Status | Integration |
+|----------|--------|-------------|
+| Windows 10 / 11 | Implemented, exe build works | Explorer context menu |
+| macOS 12+ | Source implemented, package and Quick Actions must be verified on macOS | Finder Quick Actions |
 
 ## Features
 
 - Visual settings window for save folder, filename prefix, and copy format.
-- One-click install/uninstall for Explorer context-menu entries.
-- Default save folder: current user's `Pictures\SaveImageToLink`.
-- User config: `%APPDATA%\SaveImageToLink\config.json`.
-- Context menu is installed under the current user registry hive, so admin permission is not required.
+- Windows: one-click install/uninstall for Explorer context-menu entries.
+- macOS: Finder Quick Actions installer.
+- Default save folder: current user's Pictures folder under `SaveImageToLink`.
 - Copy formats: plain path, Markdown image syntax, and file URI.
 
-## Usage
+## Windows Usage
 
 Download `SaveImageToLink.exe` and double-click it to open the settings window.
 
@@ -61,6 +67,46 @@ Output:
 dist\SaveImageToLink.exe
 ```
 
+## macOS Usage
+
+The macOS source lives in:
+
+```text
+macos/
+```
+
+Open settings:
+
+```zsh
+cd macos
+python3 -m pip install -r requirements.txt
+python3 save_image_to_link_macos.py --settings
+```
+
+Install Finder Quick Actions:
+
+```zsh
+python3 install_finder_actions.py
+```
+
+Uninstall Finder Quick Actions:
+
+```zsh
+python3 install_finder_actions.py --uninstall
+```
+
+Build the `.app` on macOS:
+
+```zsh
+./build_app.sh
+```
+
+See:
+
+```text
+macos/README.md
+```
+
 ## Privacy And Local Data
 
 This tool only reads clipboard images locally and saves them to the folder selected by the user. v1 does not upload images, connect to a remote image host, or include personal paths.
@@ -68,6 +114,5 @@ This tool only reads clipboard images locally and saves them to the folder selec
 ## Development Check
 
 ```powershell
-python -m unittest test_save_image.py
+python -m unittest test_save_image.py test_macos_save_image.py
 ```
-
