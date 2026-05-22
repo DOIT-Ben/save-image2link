@@ -8,10 +8,11 @@ macOS source version with Finder Quick Actions is in macos/.
 
 Usage:
 1. Run SaveImageToLink-Setup-Windows-x64.exe.
-2. Choose a save folder and copy format.
-3. Click 安装并启用.
-4. Copy a screenshot or image.
-5. Right-click an Explorer folder background.
+2. Click 引导 for the step-by-step guide if this is your first time.
+3. Choose a save folder and copy format.
+4. Click 安装并启用.
+5. Copy a screenshot or image.
+6. Right-click an Explorer folder background.
 
 Menus:
 - 保存图片到此处 / Save image here

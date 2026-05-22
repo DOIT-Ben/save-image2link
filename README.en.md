@@ -14,6 +14,7 @@ A small clipboard image saver. Copy a screenshot or image, save it to a folder, 
 ## Features
 
 - Compact modern settings window for save folder, filename prefix, and copy format.
+- Built-in guide page explaining the `image` filename prefix, copy formats, and Explorer workflow.
 - Windows: one-click install/uninstall for Explorer context-menu entries.
 - macOS: Finder Quick Actions installer.
 - Default save folder: current user's Pictures folder under `SaveImageToLink`.
@@ -24,11 +25,12 @@ A small clipboard image saver. Copy a screenshot or image, save it to a folder, 
 
 Download `SaveImageToLink-Setup-Windows-x64.exe` and double-click it to open the settings window.
 
-1. Choose a save folder.
-2. Choose a copy format.
-3. Click `安装并启用`.
-4. Copy a screenshot or image.
-5. Right-click the background area of an Explorer folder:
+1. If an option is unclear, click `引导` in the top-right corner first.
+2. Choose a save folder.
+3. Choose a copy format.
+4. Click `安装并启用`.
+5. Copy a screenshot or image.
+6. Right-click the background area of an Explorer folder:
    - `保存图片到此处 / Save image here`: save the image to the current folder.
    - `保存图片并复制链接 / Save image and copy link`: save the image to the configured folder and copy the image reference.
 
@@ -121,5 +123,5 @@ The Windows exe uses a compact Chinese-first interface to keep the small window 
 ## Development Check
 
 ```powershell
-python -m unittest test_save_image.py test_macos_save_image.py
+python -m unittest test_windows_gui.py test_save_image.py test_macos_save_image.py
 ```
