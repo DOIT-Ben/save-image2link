@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SaveImageToLink Compact Prototype</title>
+  <style>
+    :root {
+      --blue: #0071e3;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #e5e5ea;
+      --bg: #eef1f5;
+      --panel: #ffffff;
+      --soft: #f5f5f7;
+      --green: #10883f;
+      --green-bg: #eaf8ef;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      letter-spacing: 0;
+    }
+
+    .window {
+      width: 456px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.18);
+    }
+
+    .titlebar {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbfd;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(0, 113, 227, 0.18);
+      background: #f8fbff;
+      flex: 0 0 auto;
+    }
+
+    .icon svg { width: 17px; height: 17px; }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #d1d1d6;
+    }
+
+    .content {
+      padding: 24px;
+    }
+
+    .hero {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #f8fbff;
+      border: 1px solid rgba(0, 113, 227, 0.2);
+      flex: 0 0 auto;
+    }
+
+    .mark svg { width: 31px; height: 31px; }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.12;
+      font-weight: 750;
+    }
+
+    .sub {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .field {
+      margin-top: 14px;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    label span {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 82px;
+      gap: 8px;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #d7d7dc;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      font: 14px/1 var(--font);
+      outline: none;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .button {
+      height: 44px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font: 700 14px/1 var(--font);
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .primary {
+      grid-column: 1 / -1;
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 8px 18px rgba(0, 113, 227, 0.22);
+    }
+
+    .secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: #d7d7dc;
+      font-weight: 650;
+    }
+
+    .result {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <main class="window">
+    <div class="titlebar">
+      <div class="title">
+        <span class="icon">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="9" y="12" width="46" height="35" rx="7" fill="#fff" stroke="#0071e3" stroke-width="4"/>
+            <path d="M14 41L25 30L33 38L39 32L51 45" stroke="#34c759" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="43" cy="22" r="5" fill="#0071e3"/>
+          </svg>
+        </span>
+        保存图片链接 / SaveImageToLink
+      </div>
+      <div class="dots" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+
+    <section class="content">
+      <div class="hero">
+        <div class="mark">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="9" y="12" width="46" height="35" rx="7" fill="#fff" stroke="#0071e3" stroke-width="4"/>
+            <path d="M14 41L25 30L33 38L39 32L51 45" stroke="#34c759" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="43" cy="22" r="5" fill="#0071e3"/>
+          </svg>
+        </div>
+        <div>
+          <h1>SaveImageToLink</h1>
+          <p class="sub">保存剪贴板图片，并复制可粘贴的本地图片引用。</p>
+        </div>
+      </div>
+
+      <div class="status"><span class="pulse"></span>右键菜单未安装 / Not installed</div>
+
+      <div class="field">
+        <label>保存目录 <span>Save folder</span></label>
+        <div class="row">
+          <input class="input" value="%USERPROFILE%\\Pictures\\SaveImageToLink">
+          <button class="button secondary">选择</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>复制格式 <span>Copy format</span></label>
+        <select class="select">
+          <option>Markdown 图片（推荐）</option>
+          <option>纯路径</option>
+          <option>文件链接 file://</option>
+        </select>
+        <div class="hint">推荐 Markdown 图片，适合 Obsidian、Markdown 文档和笔记。</div>
+      </div>
+
+      <div class="field">
+        <label>文件名前缀 <span>Filename prefix</span></label>
+        <input class="input" value="image" style="max-width: 180px;">
+      </div>
+
+      <div class="actions">
+        <button class="button primary">安装并启用 / Install and Enable</button>
+        <button class="button secondary">测试保存</button>
+        <button class="button secondary">打开目录</button>
+      </div>
+
+      <div class="result">复制截图后，在文件夹空白处右键保存。图片只保存在本机，不会上传。</div>
+    </section>
+  </main>
+</body>
+</html>

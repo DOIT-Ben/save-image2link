@@ -26,7 +26,7 @@ Download `SaveImageToLink.exe` and double-click it to open the settings window.
 
 1. Choose a save folder.
 2. Choose a copy format.
-3. Click `安装并启用 / Install and Enable`.
+3. Click `安装并启用`.
 4. Copy a screenshot or image.
 5. Right-click the background area of an Explorer folder:
    - `保存图片到此处 / Save image here`: save the image to the current folder.
@@ -114,7 +114,7 @@ This tool only reads clipboard images locally and saves them to the folder selec
 
 ## Language
 
-The Windows exe uses bilingual Chinese/English text in the settings window, notifications, and context-menu entries. Documentation is available as Chinese `README.md` and English `README.en.md`.
+The Windows exe uses a compact Chinese-first interface to keep the small window clean. English documentation is available in `README.en.md` and `QUICKSTART.en.txt`.
 
 ## Development Check
 

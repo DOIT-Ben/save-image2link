@@ -423,9 +423,9 @@ def open_settings_window() -> None:
     config = load_config()
     root = tk.Tk()
     root.title(TEXT["window_title"])
-    root.geometry("780x540")
-    root.minsize(720, 500)
-    root.configure(bg="#f5f5f7")
+    root.geometry("420x430")
+    root.resizable(False, False)
+    root.configure(bg="#ffffff")
     icon_path = SCRIPT_DIR / "assets" / "icon.ico"
     if icon_path.exists():
         try:
@@ -434,48 +434,33 @@ def open_settings_window() -> None:
             pass
 
     save_dir_var = tk.StringVar(value=config["save_dir"])
-    format_items = copy_format_options()
-    label_to_format = {item["label"]: item["value"] for item in format_items}
-    format_to_label = {item["value"]: item["label"] for item in format_items}
+    format_items = [
+        ("Markdown 图片（推荐）", "markdown", "适合 Obsidian 和 Markdown 文档。"),
+        ("纯路径", "path", "复制本地文件路径。"),
+        ("文件链接 file://", "file_uri", "复制标准文件链接。"),
+    ]
+    label_to_format = {label: value for label, value, _hint in format_items}
+    format_to_label = {value: label for label, value, _hint in format_items}
+    format_hints = {value: hint for _label, value, hint in format_items}
     format_var = tk.StringVar(value=format_to_label.get(config["copy_format"], format_to_label["markdown"]))
-    format_desc_var = tk.StringVar(value="")
+    format_hint_var = tk.StringVar(value="")
     prefix_var = tk.StringVar(value=config["filename_prefix"])
-    status_var = tk.StringVar(value=TEXT["status_ready"])
     install_status_var = tk.StringVar(value="")
-    last_result_var = tk.StringVar(value=TEXT["status_waiting"])
+    result_var = tk.StringVar(value="复制截图后，在文件夹空白处右键保存。")
 
-    style = ttk.Style(root)
-    try:
-        style.theme_use("clam")
-    except Exception:
-        pass
-    style.configure("Root.TFrame", background="#f5f5f7")
-    style.configure("Card.TFrame", background="#ffffff", relief="flat")
-    style.configure("Title.TLabel", background="#f5f5f7", foreground="#111111", font=("Segoe UI", 20, "bold"))
-    style.configure("Subtitle.TLabel", background="#f5f5f7", foreground="#555555", font=("Segoe UI", 10))
-    style.configure("CardTitle.TLabel", background="#ffffff", foreground="#111111", font=("Segoe UI", 12, "bold"))
-    style.configure("Body.TLabel", background="#ffffff", foreground="#333333", font=("Segoe UI", 10))
-    style.configure("Muted.TLabel", background="#ffffff", foreground="#666666", font=("Segoe UI", 9))
-    style.configure("Status.TLabel", background="#ffffff", foreground="#0a7a2f", font=("Segoe UI", 10, "bold"))
-    style.configure("Primary.TButton", font=("Segoe UI", 10, "bold"), padding=(14, 8))
-    style.configure("Secondary.TButton", font=("Segoe UI", 10), padding=(10, 7))
+    font_title = ("Segoe UI", 19, "bold")
+    font_body = ("Segoe UI", 10)
+    font_label = ("Segoe UI", 10, "bold")
+    font_small = ("Segoe UI", 9)
 
     def selected_copy_format() -> str:
         return label_to_format.get(format_var.get(), "markdown")
 
     def update_format_description(*_args: Any) -> None:
-        value = selected_copy_format()
-        item = next((candidate for candidate in format_items if candidate["value"] == value), format_items[0])
-        if value == "path":
-            hint = TEXT["path_hint"]
-        elif value == "file_uri":
-            hint = TEXT["uri_hint"]
-        else:
-            hint = TEXT["markdown_hint"]
-        format_desc_var.set(f"{item['description']} {hint}")
+        format_hint_var.set(format_hints.get(selected_copy_format(), format_hints["markdown"]))
 
     def refresh_install_status() -> None:
-        install_status_var.set(TEXT["status_installed"] if is_context_menu_installed() else TEXT["status_not_installed"])
+        install_status_var.set("右键菜单已安装" if is_context_menu_installed() else "右键菜单未安装")
 
     def choose_folder() -> None:
         selected = filedialog.askdirectory(initialdir=save_dir_var.get() or str(default_save_dir()))
@@ -493,10 +478,12 @@ def open_settings_window() -> None:
 
     def save_settings() -> None:
         try:
-            path = save_config(current_config())
-            status_var.set(f"{TEXT['settings_saved']}: {path}")
+            save_config(current_config())
+            result_var.set("设置已保存。")
+            return True
         except Exception as exc:
             messagebox.showerror(APP_NAME, friendly_error_message(exc))
+            return False
 
     def open_folder() -> None:
         try:
@@ -511,11 +498,11 @@ def open_settings_window() -> None:
 
     def install_menu() -> None:
         try:
-            save_settings()
+            if not save_settings():
+                return
             install_context_menu()
             refresh_install_status()
-            status_var.set(TEXT["menu_installed"])
-            messagebox.showinfo(APP_NAME, TEXT["menu_installed"])
+            result_var.set("已安装。复制图片后，在文件夹空白处右键使用。")
         except Exception as exc:
             messagebox.showerror(APP_NAME, friendly_error_message(exc))
 
@@ -523,86 +510,108 @@ def open_settings_window() -> None:
         try:
             uninstall_context_menu()
             refresh_install_status()
-            status_var.set(TEXT["menu_removed"])
-            messagebox.showinfo(APP_NAME, TEXT["menu_removed"])
+            result_var.set("右键菜单已卸载。")
         except Exception as exc:
             messagebox.showerror(APP_NAME, friendly_error_message(exc))
 
     def test_save() -> None:
         try:
-            save_settings()
+            if not save_settings():
+                return
             result = save_clipboard_image(copy_link=True, config=current_config())
-            last_result_var.set(f"{TEXT['status_saved']}: {result}")
-            status_var.set(TEXT["saved_link"])
+            result_var.set(f"已保存：{result}")
         except Exception as exc:
             messagebox.showerror(APP_NAME, friendly_error_message(exc))
 
     root.columnconfigure(0, weight=1)
-    root.rowconfigure(1, weight=1)
-    header = ttk.Frame(root, style="Root.TFrame", padding=(24, 22, 24, 10))
+
+    titlebar = tk.Frame(root, bg="#fbfbfd", height=40, highlightthickness=0)
+    titlebar.grid(row=0, column=0, sticky="ew")
+    titlebar.grid_propagate(False)
+    titlebar.columnconfigure(0, weight=1)
+    tk.Label(titlebar, text="SaveImageToLink", bg="#fbfbfd", fg="#6e6e73", font=("Segoe UI", 9, "bold")).grid(
+        row=0, column=0, sticky="w", padx=18, pady=11
+    )
+
+    frame = tk.Frame(root, bg="#ffffff", padx=24, pady=22)
+    frame.grid(row=1, column=0, sticky="nsew")
+    frame.columnconfigure(0, weight=1)
+
+    header = tk.Frame(frame, bg="#ffffff")
     header.grid(row=0, column=0, sticky="ew")
-    header.columnconfigure(0, weight=1)
-    ttk.Label(header, text="SaveImageToLink", style="Title.TLabel").grid(row=0, column=0, sticky="w")
-    ttk.Label(
-        header,
-        text="保存剪贴板图片，复制可粘贴的本地图片引用 / Save clipboard images and copy a local image reference",
-        style="Subtitle.TLabel",
-    ).grid(row=1, column=0, sticky="w", pady=(4, 0))
+    icon_file = SCRIPT_DIR / "assets" / "icon.png"
+    icon_image = None
+    if icon_file.exists():
+        try:
+            icon_image = tk.PhotoImage(file=str(icon_file)).subsample(12, 12)
+            tk.Label(header, image=icon_image, bg="#ffffff").grid(row=0, column=0, rowspan=2, sticky="nw", padx=(0, 12))
+        except Exception:
+            icon_image = None
+    root._save_image_icon = icon_image
+    tk.Label(header, text="SaveImageToLink", bg="#ffffff", fg="#1d1d1f", font=font_title).grid(row=0, column=1, sticky="w")
+    tk.Label(header, text="保存截图，复制图片引用。", bg="#ffffff", fg="#6e6e73", font=font_body).grid(
+        row=1, column=1, sticky="w", pady=(4, 0)
+    )
 
-    main_frame = ttk.Frame(root, style="Root.TFrame", padding=(24, 6, 24, 18))
-    main_frame.grid(row=1, column=0, sticky="nsew")
-    main_frame.columnconfigure(0, weight=2)
-    main_frame.columnconfigure(1, weight=3)
-    main_frame.rowconfigure(0, weight=1)
+    tk.Label(
+        frame,
+        textvariable=install_status_var,
+        bg="#eaf8ef",
+        fg="#10883f",
+        anchor="w",
+        padx=12,
+        pady=8,
+        font=("Segoe UI", 10, "bold"),
+    ).grid(row=1, column=0, sticky="ew", pady=(18, 2))
 
-    left_card = ttk.Frame(main_frame, style="Card.TFrame", padding=20)
-    left_card.grid(row=0, column=0, sticky="nsew", padx=(0, 12))
-    right_card = ttk.Frame(main_frame, style="Card.TFrame", padding=20)
-    right_card.grid(row=0, column=1, sticky="nsew", padx=(12, 0))
-    right_card.columnconfigure(1, weight=1)
+    tk.Label(frame, text="保存到", bg="#ffffff", fg="#1d1d1f", font=font_label).grid(row=2, column=0, sticky="w", pady=(14, 6))
+    folder_row = tk.Frame(frame, bg="#ffffff")
+    folder_row.grid(row=3, column=0, sticky="ew")
+    folder_row.columnconfigure(0, weight=1)
+    tk.Entry(folder_row, textvariable=save_dir_var, relief="solid", bd=1, font=font_body).grid(row=0, column=0, sticky="ew", ipady=8)
+    tk.Button(folder_row, text="选择", command=choose_folder, relief="solid", bd=1, font=font_label, width=8).grid(
+        row=0, column=1, padx=(8, 0), ipady=5
+    )
 
-    ttk.Label(left_card, text=TEXT["quick_start"], style="CardTitle.TLabel").grid(row=0, column=0, sticky="w")
-    for row, text in enumerate([TEXT["step_1"], TEXT["step_2"], TEXT["step_3"], TEXT["step_4"]], start=1):
-        ttk.Label(left_card, text=text, style="Body.TLabel").grid(row=row, column=0, sticky="w", pady=(12 if row == 1 else 8, 0))
-    ttk.Separator(left_card).grid(row=5, column=0, sticky="ew", pady=18)
-    ttk.Label(left_card, textvariable=install_status_var, style="Status.TLabel").grid(row=6, column=0, sticky="w")
-    ttk.Label(left_card, textvariable=last_result_var, style="Muted.TLabel", wraplength=250).grid(row=7, column=0, sticky="w", pady=(12, 0))
-
-    ttk.Label(right_card, text="设置 / Settings", style="CardTitle.TLabel").grid(row=0, column=0, columnspan=3, sticky="w")
-
-    ttk.Label(right_card, text=TEXT["save_folder"], style="Body.TLabel").grid(row=1, column=0, columnspan=3, sticky="w", pady=(18, 6))
-    ttk.Entry(right_card, textvariable=save_dir_var).grid(row=2, column=0, columnspan=2, sticky="ew", padx=(0, 8))
-    ttk.Button(right_card, text=TEXT["browse"], command=choose_folder, style="Secondary.TButton").grid(row=2, column=2, sticky="ew")
-
-    ttk.Label(right_card, text=TEXT["copy_format"], style="Body.TLabel").grid(row=3, column=0, columnspan=3, sticky="w", pady=(16, 6))
-    format_combo = ttk.Combobox(
-        right_card,
-        values=[item["label"] for item in format_items],
+    tk.Label(frame, text="复制为", bg="#ffffff", fg="#1d1d1f", font=font_label).grid(row=4, column=0, sticky="w", pady=(14, 6))
+    ttk.Combobox(
+        frame,
+        values=[label for label, _value, _hint in format_items],
         textvariable=format_var,
         state="readonly",
-    )
-    format_combo.grid(row=4, column=0, columnspan=3, sticky="ew")
-    ttk.Label(right_card, textvariable=format_desc_var, style="Muted.TLabel", wraplength=380).grid(
-        row=5, column=0, columnspan=3, sticky="w", pady=(6, 0)
-    )
-
-    ttk.Label(right_card, text=TEXT["filename_prefix"], style="Body.TLabel").grid(row=6, column=0, columnspan=3, sticky="w", pady=(16, 6))
-    ttk.Entry(right_card, width=24, textvariable=prefix_var).grid(row=7, column=0, sticky="w")
-
-    actions = ttk.Frame(right_card, style="Card.TFrame")
-    actions.grid(row=8, column=0, columnspan=3, sticky="ew", pady=(24, 0))
-    ttk.Button(actions, text="安装并启用 / Install and Enable", command=install_menu, style="Primary.TButton").grid(
-        row=0, column=0, sticky="ew", padx=(0, 8)
-    )
-    ttk.Button(actions, text=TEXT["test_save"], command=test_save, style="Secondary.TButton").grid(row=0, column=1, sticky="ew", padx=4)
-    ttk.Button(actions, text=TEXT["open_folder"], command=open_folder, style="Secondary.TButton").grid(row=0, column=2, sticky="ew", padx=4)
-    ttk.Button(actions, text=TEXT["uninstall_menu"], command=uninstall_menu, style="Secondary.TButton").grid(
-        row=0, column=3, sticky="ew", padx=(8, 0)
+        font=font_body,
+    ).grid(row=5, column=0, sticky="ew", ipady=6)
+    tk.Label(frame, textvariable=format_hint_var, bg="#ffffff", fg="#6e6e73", font=font_small, anchor="w").grid(
+        row=6, column=0, sticky="ew", pady=(7, 0)
     )
 
-    footer = ttk.Frame(root, style="Root.TFrame", padding=(24, 0, 24, 18))
-    footer.grid(row=2, column=0, sticky="ew")
-    ttk.Label(footer, textvariable=status_var, style="Subtitle.TLabel").grid(row=0, column=0, sticky="w")
+    tk.Label(frame, text="文件名前缀", bg="#ffffff", fg="#1d1d1f", font=font_label).grid(row=7, column=0, sticky="w", pady=(14, 6))
+    tk.Entry(frame, textvariable=prefix_var, relief="solid", bd=1, font=font_body, width=22).grid(row=8, column=0, sticky="w", ipady=8)
+
+    tk.Button(
+        frame,
+        text="安装并启用",
+        command=install_menu,
+        bg="#0071e3",
+        activebackground="#0077ed",
+        fg="#ffffff",
+        activeforeground="#ffffff",
+        relief="flat",
+        bd=0,
+        font=("Segoe UI", 10, "bold"),
+    ).grid(row=9, column=0, sticky="ew", pady=(22, 0), ipady=10)
+
+    secondary = tk.Frame(frame, bg="#ffffff")
+    secondary.grid(row=10, column=0, sticky="ew", pady=(13, 0))
+    secondary.columnconfigure((0, 1, 2), weight=1)
+    for col, (label, command) in enumerate([("测试保存", test_save), ("打开目录", open_folder), ("卸载", uninstall_menu)]):
+        tk.Button(secondary, text=label, command=command, relief="flat", bd=0, bg="#ffffff", fg="#0071e3", font=font_label).grid(
+            row=0, column=col
+        )
+
+    tk.Label(frame, textvariable=result_var, bg="#ffffff", fg="#6e6e73", font=font_small, wraplength=360, justify="left").grid(
+        row=11, column=0, sticky="ew", pady=(14, 0)
+    )
 
     format_var.trace_add("write", update_format_description)
     update_format_description()

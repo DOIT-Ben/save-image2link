@@ -26,7 +26,7 @@
 
 1. 选择图片保存目录。
 2. 选择复制格式。
-3. 点击 `安装并启用 / Install and Enable`。
+3. 点击 `安装并启用`。
 4. 复制一张截图或图片。
 5. 在资源管理器文件夹空白处右键：
    - `保存图片到此处 / Save image here`：保存到当前文件夹。
@@ -114,7 +114,7 @@ macos/README.md
 
 ## 语言
 
-Windows exe 的设置界面、通知和右键菜单使用中英双语文案。文档提供中文 `README.md` 和英文 `README.en.md` 两版。
+Windows exe 的设置界面以中文为主，避免小窗口信息过载；英文说明保留在 `README.en.md` 和 `QUICKSTART.en.txt`。
 
 ## 开发验证
 

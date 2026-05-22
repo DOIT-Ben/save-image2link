@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SaveImageToLink UI Prototype</title>
+  <style>
+    :root {
+      --brand: #0071e3;
+      --brand-hover: #0077ed;
+      --text: #1d1d1f;
+      --secondary: #6e6e73;
+      --tertiary: #9b9ba1;
+      --page: #f5f5f7;
+      --surface: #ffffff;
+      --subtle: #f2f2f7;
+      --border: #e6e6eb;
+      --success: #34c759;
+      --warning: #ff9f0a;
+      --danger: #ff3b30;
+      --radius: 18px;
+      --control: 12px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(0, 113, 227, 0.08), transparent 28%),
+        var(--page);
+      color: var(--text);
+      font-family: var(--font);
+      letter-spacing: 0;
+    }
+
+    .window {
+      width: 980px;
+      height: 640px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 22px;
+      background: var(--page);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
+    }
+
+    .titlebar {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      backdrop-filter: blur(18px);
+    }
+
+    .title-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .app-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #ffffff, #eef5ff);
+      border: 1px solid rgba(0, 113, 227, 0.18);
+    }
+
+    .app-icon svg { width: 17px; height: 17px; }
+
+    .traffic {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: #d1d1d6;
+    }
+
+    .content {
+      height: calc(100% - 46px);
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 22px;
+      padding: 28px;
+    }
+
+    .sidebar,
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: #f8fbff;
+      border: 1px solid rgba(0, 113, 227, 0.18);
+    }
+
+    .brand-mark svg { width: 30px; height: 30px; }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .tagline {
+      margin: 4px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .status {
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(52, 199, 89, 0.1);
+      border: 1px solid rgba(52, 199, 89, 0.18);
+      color: #107c38;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+
+    .steps {
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--secondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .num {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--subtle);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .side-foot {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--tertiary);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .panel {
+      padding: 28px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 720;
+    }
+
+    .desc {
+      margin: 8px 0 0;
+      color: var(--secondary);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 520px;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      min-width: 128px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--subtle);
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 650;
+      text-align: center;
+    }
+
+    .form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .input,
+    .select {
+      min-height: 44px;
+      width: 100%;
+      padding: 0 14px;
+      border: 1px solid #d7d7dc;
+      border-radius: var(--control);
+      background: #fff;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 650;
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      border-color: #d7d7dc;
+      color: var(--text);
+    }
+
+    .btn.primary {
+      min-width: 190px;
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 113, 227, 0.22);
+    }
+
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .format-card {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .format-card.active {
+      border-color: rgba(0, 113, 227, 0.45);
+      background: #f2f8ff;
+      box-shadow: inset 0 0 0 1px rgba(0, 113, 227, 0.08);
+    }
+
+    .format-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .format-card p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 6px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .quiet-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--subtle);
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <main class="window">
+    <div class="titlebar">
+      <div class="title-left">
+        <span class="app-icon">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="9" y="12" width="46" height="35" rx="7" fill="#fff" stroke="#0071e3" stroke-width="4"/>
+            <path d="M14 41L25 30L33 38L39 32L51 45" stroke="#34c759" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="43" cy="22" r="5" fill="#0071e3"/>
+          </svg>
+        </span>
+        保存图片链接 / SaveImageToLink
+      </div>
+      <div class="traffic" aria-hidden="true">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+
+    <section class="content">
+      <aside class="sidebar">
+        <div class="brand-row">
+          <div class="brand-mark">
+            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect x="9" y="12" width="46" height="35" rx="7" fill="#fff" stroke="#0071e3" stroke-width="4"/>
+              <path d="M14 41L25 30L33 38L39 32L51 45" stroke="#34c759" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="43" cy="22" r="5" fill="#0071e3"/>
+            </svg>
+          </div>
+          <div>
+            <h1>SaveImageToLink</h1>
+            <p class="tagline">把剪贴板图片变成可粘贴的本地引用。</p>
+          </div>
+        </div>
+
+        <div class="status">右键菜单未安装<br>Context menu is not installed</div>
+
+        <ol class="steps">
+          <li class="step"><span class="num">1</span><span>选择保存图片的位置，不再乱放到临时目录。</span></li>
+          <li class="step"><span class="num">2</span><span>选择复制格式，默认推荐 Markdown 图片。</span></li>
+          <li class="step"><span class="num">3</span><span>安装右键菜单，之后在文件夹空白处右键使用。</span></li>
+          <li class="step"><span class="num">4</span><span>复制截图后测试保存，确认路径可用。</span></li>
+        </ol>
+
+        <div class="side-foot">
+          本工具只在本机保存图片。不会上传，不连接图床，不内置个人路径。
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>安装与设置</h2>
+            <p class="desc">一次设置，之后只需要在资源管理器右键保存图片。界面只保留和完成任务有关的选项。</p>
+          </div>
+          <div class="badge">v0.3 原型</div>
+        </div>
+
+        <div class="form">
+          <div class="field">
+            <label>保存目录 / Save folder</label>
+            <div class="input-row">
+              <input class="input" value="%USERPROFILE%\\Pictures\\SaveImageToLink">
+              <button class="btn secondary">选择 / Browse</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>复制格式 / Copy format</label>
+            <div class="format-grid">
+              <div class="format-card active">
+                <div class="format-title">Markdown 图片</div>
+                <p>推荐。适合 Obsidian、Markdown 文档和笔记。</p>
+              </div>
+              <div class="format-card">
+                <div class="format-title">纯路径</div>
+                <p>适合脚本、本机文件管理和快速定位图片。</p>
+              </div>
+              <div class="format-card">
+                <div class="format-title">文件链接 file://</div>
+                <p>适合浏览器、HTML 和支持标准文件链接的工具。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>文件名前缀 / Filename prefix</label>
+            <input class="input" value="image" style="max-width: 220px;">
+          </div>
+
+          <div class="actions">
+            <button class="btn primary">安装并启用 / Install and Enable</button>
+            <div class="quiet-actions">
+              <button class="btn secondary">测试保存 / Test</button>
+              <button class="btn secondary">打开目录 / Open</button>
+              <button class="btn secondary">卸载 / Uninstall</button>
+            </div>
+          </div>
+
+          <div class="result">
+            等待复制图片或截图。安装后，在资源管理器文件夹空白处右键选择“保存图片并复制链接”。
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
