@@ -13,3 +13,4 @@ dist/
 graphify-out/
 
 *.log
+release/
