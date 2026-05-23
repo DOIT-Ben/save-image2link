@@ -21,6 +21,28 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 RESULT_FILE = SCRIPT_DIR / "_last_result.txt"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff"}
 COPY_FORMATS = {"path", "markdown", "file_uri"}
+MENU_LANGUAGES = {"zh-CN", "en"}
+MENU_LANGUAGE_ALIASES = {
+    "zh": "zh-CN",
+    "zh_cn": "zh-CN",
+    "zh-cn": "zh-CN",
+    "cn": "zh-CN",
+    "chinese": "zh-CN",
+    "en": "en",
+    "en_us": "en",
+    "en-us": "en",
+    "english": "en",
+}
+MENU_LABELS = {
+    "zh-CN": {
+        "here": "保存图片到此处",
+        "default": "保存图片并复制链接",
+    },
+    "en": {
+        "here": "Save image here",
+        "default": "Save image and copy link",
+    },
+}
 TEXT = {
     "window_title": "保存图片链接 / SaveImageToLink",
     "save_folder": "保存目录 / Save folder",
@@ -33,8 +55,6 @@ TEXT = {
     "install_menu": "安装右键菜单 / Install menu",
     "uninstall_menu": "卸载右键菜单 / Uninstall menu",
     "test_save": "测试保存 / Test",
-    "menu_here": "保存图片到此处 / Save image here",
-    "menu_default": "保存图片并复制链接 / Save image and copy link",
     "saved": "图片已保存 / Image saved",
     "saved_link": "图片已保存并复制链接 / Image saved and link copied",
     "failed": "保存图片失败 / Save image failed",
@@ -86,7 +106,14 @@ def default_config(home: Path | None = None) -> dict[str, str]:
         "save_dir": str(default_save_dir(home=home)),
         "copy_format": "markdown",
         "filename_prefix": "image",
+        "menu_language": "zh-CN",
+        "guide_seen": "0",
     }
+
+
+def normalize_menu_language(value: str | None) -> str:
+    normalized = (value or "").strip().lower().replace(" ", "").replace("_", "-")
+    return MENU_LANGUAGE_ALIASES.get(normalized, "zh-CN")
 
 
 def normalize_config(raw: dict[str, Any] | None, home: Path | None = None) -> dict[str, str]:
@@ -98,6 +125,8 @@ def normalize_config(raw: dict[str, Any] | None, home: Path | None = None) -> di
         config["copy_format"] = "markdown"
     prefix = "".join(ch for ch in config.get("filename_prefix", "image") if ch.isalnum() or ch in "-_").strip("_-")
     config["filename_prefix"] = prefix or "image"
+    config["menu_language"] = normalize_menu_language(config.get("menu_language"))
+    config["guide_seen"] = "1" if str(config.get("guide_seen", "0")).strip().lower() in {"1", "true", "yes"} else "0"
     config["save_dir"] = str(Path(config["save_dir"]).expanduser())
     return config
 
@@ -358,15 +387,20 @@ def build_context_menu_commands(program: Path | None = None) -> dict[str, str]:
     }
 
 
-def install_context_menu(program: Path | None = None) -> None:
+def context_menu_labels(menu_language: str | None = None) -> dict[str, str]:
+    return MENU_LABELS[normalize_menu_language(menu_language)].copy()
+
+
+def install_context_menu(program: Path | None = None, menu_language: str | None = None) -> None:
     if os.name != "nt":
         raise RuntimeError("Context menu installation is only supported on Windows")
     import winreg
 
     commands = build_context_menu_commands(program)
+    labels = context_menu_labels(menu_language or load_config().get("menu_language"))
     entries = {
-        "here": (TEXT["menu_here"], commands["here"]),
-        "default": (TEXT["menu_default"], commands["default"]),
+        "here": (labels["here"], commands["here"]),
+        "default": (labels["default"], commands["default"]),
     }
     for name, (label, command) in entries.items():
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER, MENU_KEYS[name]) as key:
@@ -428,6 +462,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--save-default", action="store_true", help="Save clipboard image to configured folder.")
     parser.add_argument("--copy", "--copy-path", dest="copy", action="store_true", help="Copy formatted link to clipboard.")
     parser.add_argument("--copy-format", choices=sorted(COPY_FORMATS), help="Override configured copy format.")
+    parser.add_argument(
+        "--menu-language",
+        help="Context-menu language for installation: zh-CN/zh or en/en-US.",
+    )
     parser.add_argument("--install-context-menu", action="store_true", help="Install Explorer context-menu entries.")
     parser.add_argument("--uninstall-context-menu", action="store_true", help="Uninstall Explorer context-menu entries.")
     parser.add_argument("--settings", action="store_true", help="Open the visual settings window.")
@@ -441,9 +479,13 @@ def main(argv: list[str] | None = None) -> str | None:
     config = load_config()
     if args.copy_format:
         config["copy_format"] = args.copy_format
+    if args.menu_language:
+        config["menu_language"] = normalize_menu_language(args.menu_language)
 
     if args.install_context_menu:
-        install_context_menu()
+        if args.menu_language:
+            save_config(config)
+        install_context_menu(menu_language=config["menu_language"])
         return "context-menu-installed"
     if args.uninstall_context_menu:
         uninstall_context_menu()

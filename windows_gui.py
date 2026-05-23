@@ -18,7 +18,14 @@ WIDGET_SCALING = 0.9
 SECONDARY_BUTTON_WIDTH = 92
 FONT_FAMILY = "Microsoft YaHei UI"
 ACCENT = "#0071e3"
-GUIDE_WINDOW_SIZE = "560x680"
+TEXT_PRIMARY = "#1d1d1f"
+TEXT_SECONDARY = "#6e6e73"
+SURFACE = "#ffffff"
+APP_BG = "#f5f5f7"
+CONTROL_BG = "#fbfbfd"
+BORDER = "#d2d2d7"
+QUIET_HOVER = "#f2f2f7"
+GUIDE_WINDOW_SIZE = "460x420"
 
 
 def filename_preview(prefix: str) -> str:
@@ -36,75 +43,69 @@ def copy_format_examples(path_text: str | Path) -> dict[str, str]:
 
 
 def guide_sections() -> list[dict[str, list[str] | str]]:
-    sample_path = r"C:\Users\Alice\Pictures\SaveImageToLink\image.png"
-    examples = copy_format_examples(sample_path)
     return [
         {
             "title": "1. 先复制一张图片",
             "items": [
-                "这个工具读取的是剪贴板里的图片。你可以先截图、复制网页图片、复制聊天里的图片，或在图片软件里按 Ctrl+C。",
-                "如果剪贴板里不是图片，点击“测试保存”或右键保存时会提示“剪贴板里没有图片”。",
+                "先截图，或在网页、聊天、图片软件里复制图片。",
+                "工具读取的是剪贴板图片，不是网页地址。",
+                "没有图片时，会提示“剪贴板里没有图片”。",
             ],
         },
         {
             "title": "2. 选择保存目录",
             "items": [
-                r"默认目录是 %USERPROFILE%\Pictures\SaveImageToLink，也就是每个用户自己的图片目录。",
-                "点击“选择”可以换成任意你想保存图片的位置。工具会自动创建不存在的目录。",
-                "公开发布版本不会写入你的个人路径，别人的电脑会使用他们自己的用户目录。",
+                r"默认保存到 %USERPROFILE%\Pictures\SaveImageToLink。",
+                "点击“选择”可以换成你自己的图片目录。",
+                "目录不存在时，工具会自动创建。",
             ],
         },
         {
             "title": "3. 文件名里的 image 是什么",
             "items": [
-                "image 是文件名前缀，不是图片内容，也不是图片链接。",
-                f"保存时会自动追加时间，示例：{filename_preview('image')}。",
-                "你可以把它改成 shot、note、clip 等。比如前缀是 note，文件名会变成 note_时间.png。",
-                "保留前缀的好处是：图片不会重名，也能从文件名看出它们来自这个工具。",
+                "image 是文件名前缀，不是图片内容。",
+                f"保存后类似：{filename_preview('image')}。",
+                "你也可以改成 shot、note、clip 等。",
             ],
         },
         {
             "title": "4. 复制格式怎么选",
             "items": [
-                f"Markdown 图片（推荐）：复制 {examples['markdown']}。适合 Obsidian、Markdown 文档、很多笔记软件。粘贴后通常会直接显示图片。",
-                f"纯路径：复制 {examples['path']}。适合发给本地脚本、资源管理器地址栏、需要文件路径的软件。",
-                f"文件链接 file://：复制 {examples['file_uri']}。适合 HTML、浏览器、部分支持标准文件 URI 的工具。",
-                "不知道选哪个就用 Markdown 图片（推荐）。它对笔记场景最友好。",
+                "Markdown 图片（推荐）：适合 Obsidian、README 和笔记。",
+                "纯路径：适合脚本、本地打开和文件管理器。",
+                "文件链接 file://：适合 HTML、浏览器和支持 URI 的工具。",
             ],
         },
         {
             "title": "5. 安装并启用右键菜单",
             "items": [
-                "点“安装并启用”后，会在当前 Windows 用户下注册资源管理器右键菜单，不需要管理员权限。",
-                "菜单会出现在文件夹空白处右键里，不是图片文件本身的右键菜单。",
-                "如果按钮状态显示“右键菜单已启用”，说明注册成功。",
+                "点击“安装并启用”即可注册右键菜单。",
+                "菜单出现在文件夹空白处右键里。",
+                "注册在当前用户下，不需要管理员权限。",
             ],
         },
         {
             "title": "6. 实际保存流程",
             "items": [
-                "第一步：复制一张图片或截图。",
-                "第二步：打开资源管理器，在目标文件夹空白处右键。",
-                "第三步：选择“保存图片到此处”，图片会保存到当前文件夹。",
-                "或者选择“保存图片并复制链接”，图片会保存到设置目录，并按当前复制格式把引用放进剪贴板。",
-                "第四步：到文档、笔记或聊天框里粘贴刚复制的引用。",
+                "复制图片后，在文件夹空白处右键。",
+                "选择“保存图片到此处”会保存到当前文件夹。",
+                "选择“保存图片并复制链接”会保存并复制引用。",
             ],
         },
         {
             "title": "7. 测试保存",
             "items": [
-                "点击“测试保存”会直接从剪贴板保存一张图片，并复制对应引用。",
-                "它适合第一次安装后自检：先复制图片，再点测试保存，看保存目录里是否出现文件。",
-                "如果测试保存成功，右键菜单一般也可以正常使用。",
+                "第一次使用时，建议先复制一张图片。",
+                "点击“测试保存”，看保存目录里是否出现文件。",
+                "测试成功后，右键菜单一般也能正常使用。",
             ],
         },
         {
             "title": "8. 常见问题",
             "items": [
-                "没有图片：先确认你复制的是图片本身，不是图片所在网页地址。",
-                "找不到右键菜单：在文件夹空白区域右键，不要在文件上右键；必要时重启资源管理器或重新点击“安装并启用”。",
-                "想换目录：重新打开程序，点击“选择”，再点击“安装并启用”保存配置。",
-                "想移除：点击“卸载”，右键菜单会从当前用户配置中移除，已保存的图片不会被删除。",
+                "找不到菜单：请在文件夹空白区域右键。",
+                "想换目录：重新选择目录，再安装并启用。",
+                "想移除：点击“卸载”，已保存图片不会被删除。",
             ],
         },
     ]
@@ -126,76 +127,145 @@ def _open_path(path: Path) -> None:
     webbrowser.open(str(path))
 
 
-def _add_guide_section(ctk, parent, title: str, items: list[str]) -> None:
-    section = ctk.CTkFrame(parent, fg_color="#ffffff", corner_radius=12, border_width=1, border_color="#e5e5ea")
-    section.pack(fill="x", padx=0, pady=(0, 10))
-    ctk.CTkLabel(
-        section,
-        text=title,
-        anchor="w",
-        font=ctk.CTkFont(family=FONT_FAMILY, size=14, weight="bold"),
-        text_color="#1d1d1f",
-    ).pack(fill="x", padx=14, pady=(12, 6))
-    for item in items:
-        ctk.CTkLabel(
-            section,
-            text="• " + item,
-            anchor="w",
-            justify="left",
-            wraplength=470,
-            font=ctk.CTkFont(family=FONT_FAMILY, size=12),
-            text_color="#424245",
-        ).pack(fill="x", padx=14, pady=(0, 7))
+def centered_geometry(width: int, height: int, screen_width: int, screen_height: int) -> str:
+    x = max((screen_width - width) // 2, 0)
+    y = max((screen_height - height) // 2, 0)
+    return f"{width}x{height}+{x}+{y}"
 
 
-def open_guide_window(parent, ctk) -> None:
-    guide = ctk.CTkToplevel(parent, fg_color="#f5f5f7")
+def _center_window(window, width: int, height: int) -> None:
+    window.update_idletasks()
+    window.geometry(centered_geometry(width, height, window.winfo_screenwidth(), window.winfo_screenheight()))
+
+
+def should_show_startup_guide(config: dict[str, str]) -> bool:
+    return str(config.get("guide_seen", "0")) != "1"
+
+
+def guide_nav_labels(index: int, total: int) -> tuple[str, str]:
+    previous_label = "关闭" if index <= 0 else "上一步"
+    next_label = "完成" if index >= total - 1 else "下一步"
+    return previous_label, next_label
+
+
+def open_guide_window(parent, ctk):
+    guide = ctk.CTkToplevel(parent, fg_color=APP_BG)
     guide.title("使用引导")
     guide.geometry(GUIDE_WINDOW_SIZE)
-    guide.minsize(520, 600)
+    guide.minsize(460, 420)
+    guide.maxsize(460, 420)
+    guide.resizable(False, False)
     guide.transient(parent)
     guide.grab_set()
     guide.grid_columnconfigure(0, weight=1)
     guide.grid_rowconfigure(1, weight=1)
+    sections = guide_sections()
+    state = {"index": 0}
 
     header = ctk.CTkFrame(guide, fg_color="transparent")
-    header.grid(row=0, column=0, sticky="ew", padx=22, pady=(22, 12))
+    header.grid(row=0, column=0, sticky="ew", padx=22, pady=(20, 10))
     header.grid_columnconfigure(0, weight=1)
+    step_var = ctk.StringVar(value="")
     ctk.CTkLabel(
         header,
-        text="一步步设置 SaveImageToLink",
+        textvariable=step_var,
         anchor="w",
-        font=ctk.CTkFont(family=FONT_FAMILY, size=21, weight="bold"),
-        text_color="#1d1d1f",
+        font=ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
+        text_color=ACCENT,
     ).grid(row=0, column=0, sticky="ew")
     ctk.CTkLabel(
         header,
-        text="先理解保存目录、文件名前缀和复制格式，再安装右键菜单。",
+        text="一步一步完成设置，不用一次看完所有说明。",
         anchor="w",
         font=ctk.CTkFont(family=FONT_FAMILY, size=12),
-        text_color="#6e6e73",
-    ).grid(row=1, column=0, sticky="ew", pady=(6, 0))
+        text_color=TEXT_SECONDARY,
+    ).grid(row=1, column=0, sticky="ew", pady=(4, 0))
 
-    scroll = ctk.CTkScrollableFrame(guide, fg_color="transparent")
-    scroll.grid(row=1, column=0, sticky="nsew", padx=22, pady=(0, 12))
-    for section in guide_sections():
-        _add_guide_section(ctk, scroll, str(section["title"]), list(section["items"]))
+    progress = ctk.CTkProgressBar(header, height=5, corner_radius=3, fg_color="#e5e5ea", progress_color=ACCENT)
+    progress.grid(row=2, column=0, sticky="ew", pady=(12, 0))
+
+    card = ctk.CTkFrame(guide, fg_color=SURFACE, corner_radius=14, border_width=1, border_color="#e5e5ea")
+    card.grid(row=1, column=0, sticky="nsew", padx=22, pady=(0, 14))
+    card.grid_columnconfigure(0, weight=1)
 
     footer = ctk.CTkFrame(guide, fg_color="transparent")
     footer.grid(row=2, column=0, sticky="ew", padx=22, pady=(0, 18))
-    footer.grid_columnconfigure(0, weight=1)
-    ctk.CTkButton(
+    footer.grid_columnconfigure((0, 1), weight=1)
+    previous_button = ctk.CTkButton(
         footer,
-        text="我明白了",
-        width=118,
+        text="关闭",
+        width=112,
+        height=36,
+        corner_radius=10,
+        fg_color=QUIET_HOVER,
+        hover_color="#e5e5ea",
+        text_color=TEXT_PRIMARY,
+        font=ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
+    )
+    previous_button.grid(row=0, column=0, sticky="w")
+    next_button = ctk.CTkButton(
+        footer,
+        text="下一步",
+        width=112,
         height=36,
         corner_radius=10,
         fg_color=ACCENT,
         hover_color="#0077ed",
         font=ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
-        command=guide.destroy,
-    ).grid(row=0, column=1, sticky="e")
+    )
+    next_button.grid(row=0, column=1, sticky="e")
+
+    def render_step() -> None:
+        for child in card.winfo_children():
+            child.destroy()
+        index = state["index"]
+        section = sections[index]
+        previous_label, next_label = guide_nav_labels(index, len(sections))
+        step_var.set(f"步骤 {index + 1} / {len(sections)}")
+        progress.set((index + 1) / len(sections))
+        previous_button.configure(text=previous_label)
+        next_button.configure(text=next_label)
+        ctk.CTkLabel(
+            card,
+            text=str(section["title"]),
+            anchor="w",
+            font=ctk.CTkFont(family=FONT_FAMILY, size=19, weight="bold"),
+            text_color=TEXT_PRIMARY,
+        ).grid(row=0, column=0, sticky="ew", padx=22, pady=(22, 14))
+        for row, item in enumerate(list(section["items"]), start=1):
+            ctk.CTkLabel(
+                card,
+                text="• " + item,
+                anchor="w",
+                justify="left",
+                wraplength=374,
+                font=ctk.CTkFont(family=FONT_FAMILY, size=13),
+                text_color="#424245",
+            ).grid(row=row, column=0, sticky="ew", padx=22, pady=(0, 10))
+
+    def go_previous() -> None:
+        if state["index"] <= 0:
+            guide.destroy()
+            return
+        state["index"] -= 1
+        render_step()
+
+    def go_next() -> None:
+        if state["index"] >= len(sections) - 1:
+            guide.destroy()
+            return
+        state["index"] += 1
+        render_step()
+
+    previous_button.configure(command=go_previous)
+    next_button.configure(command=go_next)
+    render_step()
+    _center_window(guide, 460, 420)
+    guide.lift()
+    guide.attributes("-topmost", True)
+    guide.after(250, lambda: guide.attributes("-topmost", False))
     guide.focus_force()
+    return guide
 
 
 def open_settings_window() -> None:
@@ -213,12 +283,13 @@ def open_settings_window() -> None:
     config = core.load_config()
     label_to_format, format_to_label, format_hints = _format_maps()
 
-    app = ctk.CTk(fg_color="#f5f5f7")
+    app = ctk.CTk(fg_color=APP_BG)
     app.title("SaveImageToLink")
     app.geometry(WINDOW_SIZE)
     app.minsize(*WINDOW_MIN_SIZE)
     app.maxsize(*WINDOW_MIN_SIZE)
     app.resizable(False, False)
+    _center_window(app, *WINDOW_MIN_SIZE)
 
     icon_path = core.SCRIPT_DIR / "assets" / "icon.ico"
     if icon_path.exists():
@@ -256,8 +327,14 @@ def open_settings_window() -> None:
                 "save_dir": save_dir_var.get(),
                 "copy_format": selected_copy_format(),
                 "filename_prefix": prefix_var.get(),
+                "menu_language": config.get("menu_language", "zh-CN"),
+                "guide_seen": config.get("guide_seen", "0"),
             }
         )
+
+    def mark_guide_seen() -> None:
+        config["guide_seen"] = "1"
+        core.save_config(current_config())
 
     def save_settings(show_result: bool = True) -> bool:
         try:
@@ -315,8 +392,14 @@ def open_settings_window() -> None:
     def show_guide() -> None:
         open_guide_window(app, ctk)
 
+    def show_startup_guide() -> None:
+        if not should_show_startup_guide(config):
+            return
+        open_guide_window(app, ctk)
+        mark_guide_seen()
+
     app.grid_columnconfigure(0, weight=1)
-    shell = ctk.CTkFrame(app, fg_color="#ffffff", corner_radius=16, border_width=1, border_color="#e5e5ea")
+    shell = ctk.CTkFrame(app, fg_color=SURFACE, corner_radius=16, border_width=1, border_color="#e5e5ea")
     shell.grid(row=0, column=0, padx=12, pady=12, sticky="nsew")
     shell.grid_columnconfigure(0, weight=1)
 
@@ -333,19 +416,19 @@ def open_settings_window() -> None:
         except Exception:
             icon_image = None
 
-    icon_box = ctk.CTkLabel(header, text="", image=icon_image, width=44, height=44, fg_color="#f5f5f7", corner_radius=11)
+    icon_box = ctk.CTkLabel(header, text="", image=icon_image, width=44, height=44, fg_color=APP_BG, corner_radius=11)
     icon_box.grid(row=0, column=0, rowspan=2, padx=(0, 12), sticky="w")
     ctk.CTkLabel(
         header,
         text="SaveImageToLink",
         font=ctk.CTkFont(family="Segoe UI", size=19, weight="bold"),
-        text_color="#1d1d1f",
+        text_color=TEXT_PRIMARY,
     ).grid(row=0, column=1, sticky="w")
     ctk.CTkLabel(
         header,
         text="保存截图，复制图片引用",
         font=ctk.CTkFont(family=FONT_FAMILY, size=11),
-        text_color="#6e6e73",
+        text_color=TEXT_SECONDARY,
     ).grid(row=1, column=1, sticky="w", pady=(2, 0))
     ctk.CTkButton(
         header,
@@ -353,7 +436,7 @@ def open_settings_window() -> None:
         width=54,
         height=30,
         corner_radius=10,
-        fg_color="#f2f2f7",
+        fg_color=QUIET_HOVER,
         hover_color="#e5e5ea",
         text_color=ACCENT,
         font=ctk.CTkFont(family=FONT_FAMILY, size=11, weight="bold"),
@@ -384,8 +467,8 @@ def open_settings_window() -> None:
         textvariable=save_dir_var,
         height=36,
         corner_radius=10,
-        border_color="#d2d2d7",
-        fg_color="#fbfbfd",
+        border_color=BORDER,
+        fg_color=CONTROL_BG,
         font=ctk.CTkFont(family="Segoe UI", size=12),
     ).grid(row=0, column=0, sticky="ew")
     ctk.CTkButton(
@@ -394,9 +477,9 @@ def open_settings_window() -> None:
         width=62,
         height=36,
         corner_radius=10,
-        fg_color="#f2f2f7",
+        fg_color=QUIET_HOVER,
         hover_color="#e5e5ea",
-        text_color="#1d1d1f",
+        text_color=TEXT_PRIMARY,
         font=ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
         command=choose_folder,
     ).grid(row=0, column=1, padx=(8, 0))
@@ -410,23 +493,25 @@ def open_settings_window() -> None:
         variable=format_var,
         height=36,
         corner_radius=10,
-        fg_color="#fbfbfd",
-        button_color="#e5e5ea",
-        button_hover_color="#d2d2d7",
-        text_color="#1d1d1f",
-        dropdown_fg_color="#ffffff",
-        dropdown_hover_color="#f2f2f7",
+        fg_color=CONTROL_BG,
+        button_color=CONTROL_BG,
+        button_hover_color=QUIET_HOVER,
+        text_color=TEXT_PRIMARY,
+        dropdown_fg_color=SURFACE,
+        dropdown_hover_color=QUIET_HOVER,
+        dropdown_text_color=TEXT_PRIMARY,
         font=ctk.CTkFont(family=FONT_FAMILY, size=12),
         dropdown_font=ctk.CTkFont(family=FONT_FAMILY, size=12),
         command=lambda _value: update_format_hint(),
     )
+    format_menu.configure(anchor="w")
     format_menu.grid(row=3, column=0, pady=(7, 0), sticky="ew")
     ctk.CTkLabel(
         body,
         textvariable=hint_var,
         anchor="w",
         font=ctk.CTkFont(family=FONT_FAMILY, size=10),
-        text_color="#6e6e73",
+        text_color=TEXT_SECONDARY,
     ).grid(row=4, column=0, pady=(6, 0), sticky="ew")
 
     compact_row = ctk.CTkFrame(body, fg_color="transparent")
@@ -436,7 +521,7 @@ def open_settings_window() -> None:
         compact_row,
         text="文件名",
         font=ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
-        text_color="#1d1d1f",
+        text_color=TEXT_PRIMARY,
     ).grid(row=0, column=0, padx=(0, 8))
     ctk.CTkEntry(
         compact_row,
@@ -444,8 +529,8 @@ def open_settings_window() -> None:
         height=32,
         width=116,
         corner_radius=9,
-        border_color="#d2d2d7",
-        fg_color="#fbfbfd",
+        border_color=BORDER,
+        fg_color=CONTROL_BG,
         font=ctk.CTkFont(family="Segoe UI", size=12),
     ).grid(row=0, column=1, sticky="w")
 
@@ -468,7 +553,7 @@ def open_settings_window() -> None:
         "height": 32,
         "corner_radius": 10,
         "fg_color": "transparent",
-        "hover_color": "#f2f2f7",
+        "hover_color": QUIET_HOVER,
         "text_color": ACCENT,
         "font": ctk.CTkFont(family=FONT_FAMILY, size=12, weight="bold"),
     }
@@ -483,10 +568,11 @@ def open_settings_window() -> None:
         justify="left",
         anchor="w",
         font=ctk.CTkFont(family=FONT_FAMILY, size=11),
-        text_color="#6e6e73",
+        text_color=TEXT_SECONDARY,
     ).grid(row=5, column=0, padx=18, pady=(8, 14), sticky="ew")
 
     format_var.trace_add("write", update_format_hint)
     update_format_hint()
     refresh_install_status()
+    app.after(350, show_startup_guide)
     app.mainloop()

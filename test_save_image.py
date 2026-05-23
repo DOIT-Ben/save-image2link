@@ -37,13 +37,38 @@ class SaveImageTests(unittest.TestCase):
 
             config = save_image.load_config(config_file=config_file, home=home)
             self.assertEqual(config["save_dir"], str(home / "Pictures" / "SaveImageToLink"))
+            self.assertEqual(config["menu_language"], "zh-CN")
+            self.assertEqual(config["guide_seen"], "0")
 
             config["save_dir"] = str(Path(tmpdir) / "images")
             config["copy_format"] = "path"
+            config["menu_language"] = "en"
+            config["guide_seen"] = "1"
             save_image.save_config(config, config_file=config_file)
             loaded = save_image.load_config(config_file=config_file, home=home)
             self.assertEqual(loaded["copy_format"], "path")
             self.assertEqual(loaded["save_dir"], str(Path(tmpdir) / "images"))
+            self.assertEqual(loaded["menu_language"], "en")
+            self.assertEqual(loaded["guide_seen"], "1")
+
+    def test_menu_language_aliases_are_normalized(self):
+        self.assertEqual(save_image.normalize_menu_language("zh"), "zh-CN")
+        self.assertEqual(save_image.normalize_menu_language("zh-CN"), "zh-CN")
+        self.assertEqual(save_image.normalize_menu_language("en"), "en")
+        self.assertEqual(save_image.normalize_menu_language("en-US"), "en")
+        self.assertEqual(save_image.normalize_menu_language("unknown"), "zh-CN")
+
+    def test_context_menu_labels_are_not_bilingual(self):
+        chinese = save_image.context_menu_labels("zh-CN")
+        english = save_image.context_menu_labels("en")
+
+        self.assertEqual(chinese["here"], "保存图片到此处")
+        self.assertEqual(chinese["default"], "保存图片并复制链接")
+        self.assertEqual(english["here"], "Save image here")
+        self.assertEqual(english["default"], "Save image and copy link")
+        for labels in (chinese, english):
+            self.assertNotIn(" / ", labels["here"])
+            self.assertNotIn(" / ", labels["default"])
 
     def test_build_context_menu_commands_target_program_and_configured_actions(self):
         commands = save_image.build_context_menu_commands(Path(r"C:\Tools\SaveImageToLink.exe"))

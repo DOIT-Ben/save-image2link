@@ -2,7 +2,24 @@
 
 [English README](README.en.md)
 
-一个剪贴板图片保存小工具：复制截图后，把图片保存到指定目录，并自动复制本地图片引用。
+一个剪贴板图片本地资产化小工具：复制截图或图片后，把它保存到指定目录，并自动复制可粘贴、可追踪、可复用的本地图片引用。
+
+## 它解决的不是“上传截图”
+
+很多 AI 编码 CLI 和聊天工具现在已经支持直接上传截图。如果只是临时让 AI 看一眼图片，直接上传通常更快。
+
+SaveImageToLink 解决的是另一个问题：
+
+> 截图之后，这张图要保存在哪里？文档里怎么引用？过几天还能不能找到？
+
+它适合把剪贴板图片变成稳定的本地素材，放进 README、Obsidian、教程、GitHub issue、项目复盘或其他 Markdown 工作流里。
+
+简单说：
+
+- 临时上传：解决“这一次让 AI 看见”。
+- SaveImageToLink：解决“这张图片以后放哪、怎么引用、怎么复用”。
+
+本工具默认只处理本地文件，不上传图片，不连接图床，也不绑定任何账号。
 
 ## 平台状态
 
@@ -31,8 +48,8 @@
 4. 点击 `安装并启用`。
 5. 复制一张截图或图片。
 6. 在资源管理器文件夹空白处右键：
-   - `保存图片到此处 / Save image here`：保存到当前文件夹。
-   - `保存图片并复制链接 / Save image and copy link`：保存到设置目录，并复制图片引用。
+   - `保存图片到此处`：保存到当前文件夹。
+   - `保存图片并复制链接`：保存到设置目录，并复制图片引用。
 
 也可以使用批处理：
 
@@ -58,6 +75,15 @@ python .\save_image.py --uninstall-context-menu
 python .\save_image.py --save-default --copy
 python .\save_image.py --save-here "D:\Images"
 ```
+
+右键菜单语言：
+
+```powershell
+python .\save_image.py --install-context-menu --menu-language zh-CN
+python .\save_image.py --install-context-menu --menu-language en
+```
+
+中文版本默认注册中文菜单；英文版本或英文安装脚本应使用 `--menu-language en`。右键菜单不会再同时显示中英文。
 
 ## 打包 exe
 

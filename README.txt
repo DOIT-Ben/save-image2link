@@ -15,8 +15,8 @@ Usage:
 6. Right-click an Explorer folder background.
 
 Menus:
-- 保存图片到此处 / Save image here
-- 保存图片并复制链接 / Save image and copy link
+- 中文版: 保存图片到此处; 保存图片并复制链接
+- English: Save image here; Save image and copy link
 
 Default save folder:
 %USERPROFILE%\Pictures\SaveImageToLink
